@@ -60,7 +60,7 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Dashboard",
+    name: "Дашборд",
     key: "dashboard",
     icon: <Icon fontSize="small">dashboard</Icon>,
     route: "/dashboard",
@@ -92,7 +92,7 @@ const routes = [
   // },
   {
     type: "collapse",
-    name: "Profile",
+    name: "Профиль",
     key: "profile",
     icon: <Icon fontSize="small">person</Icon>,
     route: "/profile",
@@ -100,7 +100,7 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Sign In",
+    name: "Вход",
     key: "sign-in",
     icon: <Icon fontSize="small">login</Icon>,
     route: "/authentication/sign-in",
@@ -108,7 +108,7 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Sign Up",
+    name: "Регистрация",
     key: "sign-up",
     icon: <Icon fontSize="small">assignment</Icon>,
     route: "/authentication/sign-up",
