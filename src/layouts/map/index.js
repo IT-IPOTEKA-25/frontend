@@ -1,5 +1,5 @@
 import React from "react";
-import { YMaps, Map, Placemark } from "@pbe/react-yandex-maps";
+import { YMaps, Map, Placemark, GeoObject } from "@pbe/react-yandex-maps";
 
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
@@ -11,17 +11,32 @@ import Footer from "examples/Footer";
 
 function CustomMap() {
   const defaultState = {
-    center: [55.751574, 37.573856],
-    zoom: 5,
+    center: [53.440206, 158.632005],
+    zoom: 10,
   };
 
   return (
     <DashboardLayout>
       <DashboardNavbar />
-      <MDBox mt={6} mb={3}>
+      <MDBox mb={5}>
         <YMaps>
-          <Map defaultState={defaultState}>
-            <Placemark geometry={[55.684758, 37.738521]} />
+          <Map defaultState={defaultState} width={1024} height={512}>
+            <Placemark geometry={[53.440206, 158.632005]} />
+            <Placemark geometry={[53.510945, 158.759296]} />
+            <GeoObject
+              geometry={{
+                type: "LineString",
+                coordinates: [
+                  [53.440206, 158.632005], // кордон Пиначевский
+                  [53.510945, 158.759296], // Кордон Центральный
+                ],
+              }}
+              options={{
+                geodesic: true,
+                strokeWidth: 5,
+                strokeColor: "#F008",
+              }}
+            />
           </Map>
         </YMaps>
       </MDBox>
