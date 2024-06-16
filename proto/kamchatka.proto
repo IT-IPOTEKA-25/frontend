@@ -1,0 +1,102 @@
+syntax = "proto3";
+
+package main;
+
+option go_package = " github.com/IT-IPOTEKA-25/kamchatka-backend/generated/go";
+
+service KamchatkaService {
+  rpc GetRouteCoordinates (GetRouteCoordinatesRequest) returns (GetRouteCoordinatesResponse);
+  rpc GetRecreationalCapacity (GetRecreationalCapacityRequest) returns (GetRecreationalCapacityResponse);
+  rpc AddAlert (AddAlertRequest) returns (StringResultResponse);
+  rpc CreateUser (CreateUserRequest) returns (CreateUserResponse);
+  rpc UpdateRecreationalCapacity (UpdateRecreationalCapacityRequest) returns (UpdateRecreationalCapacityResponse);
+  rpc GetGroups (GetGroupsRequest) returns (GetGroupsResponse);
+  rpc GetGroupTerritories (GetGroupTerritoriesRequest) returns (GetGroupTerritoriesResponse);
+}
+
+message GetRouteCoordinatesRequest {
+  int64 id = 1;
+}
+
+message GetRouteCoordinatesResponse {
+  repeated Coordinate coordinates = 1;
+}
+
+message Coordinate{
+  string name = 1;
+  repeated float dot = 2;
+}
+
+message GetRecreationalCapacityRequest {
+  int64 id = 1;
+}
+
+message GetRecreationalCapacityResponse {
+  float length = 1;
+  float daytime = 2;
+  float distance = 3;
+  float average_time = 4;
+  int32 average_humans = 5;
+  float average_days = 6;
+  float recreational_result = 7;
+}
+
+message AddAlertRequest{
+  float user_id = 1;
+  string description = 2;
+  string image_url = 3;
+}
+
+message StringResultResponse{
+  string result = 1;
+}
+
+message CreateUserRequest{
+  string name = 1;
+  string phone = 2;
+}
+
+message CreateUserResponse{
+  int64 id = 1;
+}
+
+message UpdateRecreationalCapacityRequest {
+  int64 id = 1;
+  float length = 2;
+  float daytime = 3;
+  float distance = 4;
+  float average_time = 5;
+  int32 average_humans = 6;
+  float average_days = 7;
+}
+
+message UpdateRecreationalCapacityResponse {
+  float recreational_result = 1;
+}
+
+message GetGroupsRequest{
+}
+
+message GetGroupsResponse{
+  repeated Group groups = 1;
+}
+
+message Group{
+  int64 id = 1;
+  string name = 2;
+}
+
+message GetGroupTerritoriesRequest{
+  int64 id = 1;
+}
+
+message GetGroupTerritoriesResponse{
+  repeated Territory territories = 1;
+}
+
+message Territory{
+  int64 id = 1;
+  string name = 2;
+  int64 current_workload = 3;
+  bool route_open = 4;
+}

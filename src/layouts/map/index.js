@@ -8,6 +8,7 @@ import MDBox from "components/MDBox";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
+import KamchatkaComponent from "KamchatkaComponent";
 
 function CustomMap() {
   const defaultState = {
@@ -18,6 +19,7 @@ function CustomMap() {
   return (
     <DashboardLayout>
       <DashboardNavbar />
+      <KamchatkaComponent />
       <MDBox mb={5}>
         <YMaps>
           <Map defaultState={defaultState} width={1024} height={512}>
