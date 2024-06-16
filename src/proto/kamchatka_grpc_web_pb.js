@@ -500,5 +500,66 @@ proto.main.KamchatkaServicePromiseClient.prototype.getGroupTerritories =
 };
 
 
+/**
+ * @const
+ * @type {!grpc.web.MethodDescriptor<
+ *   !proto.main.GetSatelliteAlertsRequest,
+ *   !proto.main.GetSatelliteAlertsResponse>}
+ */
+const methodDescriptor_KamchatkaService_GetSatelliteAlerts = new grpc.web.MethodDescriptor(
+  '/main.KamchatkaService/GetSatelliteAlerts',
+  grpc.web.MethodType.UNARY,
+  proto.main.GetSatelliteAlertsRequest,
+  proto.main.GetSatelliteAlertsResponse,
+  /**
+   * @param {!proto.main.GetSatelliteAlertsRequest} request
+   * @return {!Uint8Array}
+   */
+  function(request) {
+    return request.serializeBinary();
+  },
+  proto.main.GetSatelliteAlertsResponse.deserializeBinary
+);
+
+
+/**
+ * @param {!proto.main.GetSatelliteAlertsRequest} request The
+ *     request proto
+ * @param {?Object<string, string>} metadata User defined
+ *     call metadata
+ * @param {function(?grpc.web.RpcError, ?proto.main.GetSatelliteAlertsResponse)}
+ *     callback The callback function(error, response)
+ * @return {!grpc.web.ClientReadableStream<!proto.main.GetSatelliteAlertsResponse>|undefined}
+ *     The XHR Node Readable Stream
+ */
+proto.main.KamchatkaServiceClient.prototype.getSatelliteAlerts =
+    function(request, metadata, callback) {
+  return this.client_.rpcCall(this.hostname_ +
+      '/main.KamchatkaService/GetSatelliteAlerts',
+      request,
+      metadata || {},
+      methodDescriptor_KamchatkaService_GetSatelliteAlerts,
+      callback);
+};
+
+
+/**
+ * @param {!proto.main.GetSatelliteAlertsRequest} request The
+ *     request proto
+ * @param {?Object<string, string>=} metadata User defined
+ *     call metadata
+ * @return {!Promise<!proto.main.GetSatelliteAlertsResponse>}
+ *     Promise that resolves to the response
+ */
+proto.main.KamchatkaServicePromiseClient.prototype.getSatelliteAlerts =
+    function(request, metadata) {
+  return this.client_.unaryCall(this.hostname_ +
+      '/main.KamchatkaService/GetSatelliteAlerts',
+      request,
+      metadata || {},
+      methodDescriptor_KamchatkaService_GetSatelliteAlerts);
+};
+
+
 module.exports = proto.main;
 
