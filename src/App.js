@@ -36,8 +36,6 @@ import routes from "routes";
 // Material Dashboard 2 React contexts
 import { useMaterialUIController, setMiniSidenav } from "context";
 
-import HelloComponent from "./HelloComponent";
-
 export default function App() {
   const [controller, dispatch] = useMaterialUIController();
   const { miniSidenav, direction, layout, sidenavColor, darkMode } = controller;
@@ -98,7 +96,6 @@ export default function App() {
           />
         </>
       )}
-      <HelloComponent />
       <Routes>
         {getRoutes(routes)}
         <Route path="*" element={<Navigate to="/map" />} />
