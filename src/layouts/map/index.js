@@ -13,9 +13,11 @@ import KamchatkaComponent from "KamchatkaComponent";
 import { KamchatkaServiceClient } from "proto/kamchatka_grpc_web_pb";
 import {
   GetRouteCoordinatesRequest,
+  GetRouteCoordinatesResponse,
   GetGroupsRequest,
   GetGroupsResponse,
-  GetRouteCoordinatesResponse,
+  GetGroupTerritoriesRequest,
+  GetGroupTerritoriesResponse,
   Coordinate,
 } from "proto/kamchatka_pb";
 
@@ -23,14 +25,14 @@ function CustomMap() {
   const [placemarks, setPlacemarks] = useState([]);
   const [coords, setCoords] = useState([]);
   const [groups, setGroups] = useState([]);
+  const [territory, setGroupsTerritory] = useState([]);
   const [defaultState, setDefaultState] = useState({
     center: [53.440206, 158.632005],
-    zoom: 11,
+    zoom: 10,
   });
 
   useEffect(() => {
     fetchGroups();
-    fetchRouteCoordinates();
   }, []);
 
   const fetchGroups = () => {
@@ -47,6 +49,7 @@ function CustomMap() {
           id: g.id,
         }));
         setGroups(groups);
+        fetchRouteCoordinates();
       }
     });
   };
@@ -83,21 +86,59 @@ function CustomMap() {
     });
   };
 
+  // const fetchGroupTerritory = (group) => {
+  //   const client = new KamchatkaServiceClient("http://localhost:8080", null, null);
+  //   const request = new GetGroupTerritoriesRequest();
+  //   request.setId(1);
+
+  //   client.getGroupTerritories(request, {}, (err, response) => {
+  //     if (err) {
+  //       console.error("!Error fetching route coordinates:", err.message);
+  //     } else {
+  //       const r = response.array[0];
+  //       const territory = r.  map((g) => ({
+  //         // name: g.name,
+  //         // id: g.id,
+  //         // currentWorkLoad: g.currentWorkLoad,
+  //         // open: g.open,
+  //         id: g[0],
+  //         name: g[1],
+  //       }));
+
+  //       var res = (
+  //         <div>
+  //           {territory}
+  //           <h6>Выберите территорию:</h6>
+  //         </div>
+  //       );
+  //       setGroupsTerritory(territory);
+  //     }
+  //   });
+  // };
+
   return (
     <DashboardLayout>
       <DashboardNavbar />
       {/* <KamchatkaComponent /> */}
       Антропогенная нагрузка по маршрутам
       <MDBox mb={5}>
-        <select>
+        <label>
+          <h6>Выберите группу маршрутов:</h6>
+        </label>
+        <select
+          onChange={(value) => {
+            //fetchGroupTerritory(value);
+          }}
+        >
           {groups.map((group, index) => (
             <option key={index} value={group.id}>
               {group.name}
             </option>
           ))}
         </select>
+        {territory}
         <YMaps>
-          <Map defaultState={defaultState} width={1024} height={512}>
+          <Map defaultState={defaultState} width={860} height={420}>
             {placemarks.map((placemark, index) => (
               <Placemark
                 key={index}
