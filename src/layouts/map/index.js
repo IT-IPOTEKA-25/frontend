@@ -19,9 +19,10 @@ import {
 
 function CustomMap() {
   const [placemarks, setPlacemarks] = useState([]);
+  const [coords, setCoords] = useState([]);
   const [defaultState, setDefaultState] = useState({
     center: [53.440206, 158.632005],
-    zoom: 10,
+    zoom: 11,
   });
 
   useEffect(() => {
@@ -38,13 +39,23 @@ function CustomMap() {
         console.error("!Error fetching route coordinates:", err.message);
       } else {
         const coordinatesList = response.getCoordinatesList();
+        const coords = [];
+        coordinatesList.forEach((elem) => coords.push(elem.getDotList()));
         const placemarks = coordinatesList.map((coordinate) => ({
           geometry: coordinate.getDotList(),
           properties: {
             hintContent: coordinate.getName(),
             balloonContent: coordinate.getName(),
           },
+          options: {
+            preset: "islands#blueCircleDotIconWithCaption",
+            balloonCloseButton: false,
+            balloonMinWidth: 200,
+            balloonMinHeight: 100,
+          },
         }));
+
+        setCoords(coords);
         setPlacemarks(placemarks);
       }
     });
@@ -53,7 +64,8 @@ function CustomMap() {
   return (
     <DashboardLayout>
       <DashboardNavbar />
-      <KamchatkaComponent />
+      {/* <KamchatkaComponent /> */}
+      Антропогенная нагрузка по маршрутам
       <MDBox mb={5}>
         <YMaps>
           <Map defaultState={defaultState} width={1024} height={512}>
@@ -67,15 +79,12 @@ function CustomMap() {
             <GeoObject
               geometry={{
                 type: "LineString",
-                coordinates: [
-                  [53.440206, 158.632005], // кордон Пиначевский
-                  [53.510945, 158.759296], // Кордон Центральный
-                ],
+                coordinates: coords,
               }}
               options={{
                 geodesic: true,
                 strokeWidth: 5,
-                strokeColor: "#F008",
+                strokeColor: "#FА08",
               }}
             />
           </Map>
