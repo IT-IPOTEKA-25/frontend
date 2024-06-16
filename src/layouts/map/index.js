@@ -13,6 +13,8 @@ import KamchatkaComponent from "KamchatkaComponent";
 import { KamchatkaServiceClient } from "proto/kamchatka_grpc_web_pb";
 import {
   GetRouteCoordinatesRequest,
+  GetGroupsRequest,
+  GetGroupsResponse,
   GetRouteCoordinatesResponse,
   Coordinate,
 } from "proto/kamchatka_pb";
@@ -20,14 +22,34 @@ import {
 function CustomMap() {
   const [placemarks, setPlacemarks] = useState([]);
   const [coords, setCoords] = useState([]);
+  const [groups, setGroups] = useState([]);
   const [defaultState, setDefaultState] = useState({
     center: [53.440206, 158.632005],
     zoom: 11,
   });
 
   useEffect(() => {
+    fetchGroups();
     fetchRouteCoordinates();
   }, []);
+
+  const fetchGroups = () => {
+    const client = new KamchatkaServiceClient("http://localhost:8080", null, null);
+    const request = new GetGroupsRequest();
+
+    client.getGroups(request, {}, (err, response) => {
+      if (err) {
+        console.error("!Error fetching route coordinates:", err.message);
+      } else {
+        const r = response.getGroupsList();
+        const groups = r.map((g) => ({
+          name: g.getName(),
+          id: g.id,
+        }));
+        setGroups(groups);
+      }
+    });
+  };
 
   const fetchRouteCoordinates = () => {
     const client = new KamchatkaServiceClient("http://localhost:8080", null, null);
@@ -67,6 +89,13 @@ function CustomMap() {
       {/* <KamchatkaComponent /> */}
       Антропогенная нагрузка по маршрутам
       <MDBox mb={5}>
+        <select>
+          {groups.map((group, index) => (
+            <option key={index} value={group.id}>
+              {group.name}
+            </option>
+          ))}
+        </select>
         <YMaps>
           <Map defaultState={defaultState} width={1024} height={512}>
             {placemarks.map((placemark, index) => (
