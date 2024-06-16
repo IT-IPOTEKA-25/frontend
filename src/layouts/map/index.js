@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { YMaps, Map, Placemark, GeoObject } from "@pbe/react-yandex-maps";
 
 // Material Dashboard 2 React components
@@ -10,10 +10,44 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import KamchatkaComponent from "KamchatkaComponent";
 
+import { KamchatkaServiceClient } from "proto/kamchatka_grpc_web_pb";
+import {
+  GetRouteCoordinatesRequest,
+  GetRouteCoordinatesResponse,
+  Coordinate,
+} from "proto/kamchatka_pb";
+
 function CustomMap() {
-  const defaultState = {
+  const [placemarks, setPlacemarks] = useState([]);
+  const [defaultState, setDefaultState] = useState({
     center: [53.440206, 158.632005],
     zoom: 10,
+  });
+
+  useEffect(() => {
+    fetchRouteCoordinates();
+  }, []);
+
+  const fetchRouteCoordinates = () => {
+    const client = new KamchatkaServiceClient("http://localhost:8080", null, null);
+    const request = new GetRouteCoordinatesRequest();
+    request.setId(1);
+
+    client.getRouteCoordinates(request, {}, (err, response) => {
+      if (err) {
+        console.error("!Error fetching route coordinates:", err.message);
+      } else {
+        const coordinatesList = response.getCoordinatesList();
+        const placemarks = coordinatesList.map((coordinate) => ({
+          geometry: coordinate.getDotList(),
+          properties: {
+            hintContent: coordinate.getName(),
+            balloonContent: coordinate.getName(),
+          },
+        }));
+        setPlacemarks(placemarks);
+      }
+    });
   };
 
   return (
@@ -23,8 +57,13 @@ function CustomMap() {
       <MDBox mb={5}>
         <YMaps>
           <Map defaultState={defaultState} width={1024} height={512}>
-            <Placemark geometry={[53.440206, 158.632005]} />
-            <Placemark geometry={[53.510945, 158.759296]} />
+            {placemarks.map((placemark, index) => (
+              <Placemark
+                key={index}
+                geometry={placemark.geometry}
+                properties={placemark.properties}
+              />
+            ))}
             <GeoObject
               geometry={{
                 type: "LineString",
